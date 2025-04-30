@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gabriel Marcel | Gestor de Tráfego Pago</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilo para ocultar as barras de rolagem */
+        html {
+            overflow: -moz-scrollbars-none; /* Firefox */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+        }
+        
+        html::-webkit-scrollbar {
+            display: none; /* Chrome/Safari/Opera */
+            width: 0 !important;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #0a0a0a;
+            color: #f5f5f5;
+            scroll-behavior: smooth;
+            -ms-overflow-style: none; /* IE/Edge */
+            overflow: -moz-scrollbars-none; /* Firefox */
+        }
+        
+        body::-webkit-scrollbar {
+            display: none; /* Chrome/Safari/Opera */
+            width: 0 !important;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .neon-shadow {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+        
+        .neon-border {
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .neon-border:hover {
+            border: 1px solid rgba(59, 130, 246, 0.8);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+        }
+        
+        .tool-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .tool-icon:hover {
+            transform: translateY(-5px);
+            filter: drop-shadow(0 5px 10px rgba(59, 130, 246, 0.5));
+        }
+        
+        .stat-card {
+            background: linear-gradient(145deg, #111111, #1a1a1a);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .glow {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+            }
+            to {
+                box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
+            }
+        }
+        
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            margin-top: 10px;
+        }
+
+        /* Animations */
+        .hidden-animation {
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .fade-in {
+            opacity: 1;
+        }
+
+        .slide-up {
+            transform: translateY(30px);
+        }
+
+        .slide-up.animate {
+            transform: translateY(0);
+        }
+
+        .slide-right {
+            transform: translateX(-30px);
+        }
+
+        .slide-right.animate {
+            transform: translateX(0);
+        }
+
+        .slide-left {
+            transform: translateX(30px);
+        }
+
+        .slide-left.animate {
+            transform: translateX(0);
+        }
+
+        .scale-up {
+            transform: scale(0.95);
+        }
+
+        .scale-up.animate {
+            transform: scale(1);
+        }
+
+        .delay-100 {
+            transition-delay: 100ms;
+        }
+
+        .delay-200 {
+            transition-delay: 200ms;
+        }
+
+        .delay-300 {
+            transition-delay: 300ms;
+        }
+
+        .delay-400 {
+            transition-delay: 400ms;
+        }
+
+        .delay-500 {
+            transition-delay: 500ms;
+        }
+
+        .delay-600 {
+            transition-delay: 600ms;
+        }
+
+        /* Performance meter styles */
+        .performance-meter {
+            position: relative;
+            height: 10px;
+            background: #1e1e1e;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .performance-meter::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 85%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            border-radius: 10px;
+            animation: meterAnimation 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes meterAnimation {
+            0% { width: 82%; }
+            100% { width: 88%; }
+        }
+
+        .performance-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            margin-left: 8px;
+        }
+
+        .performance-badge.green {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .performance-badge.purple {
+            background: rgba(168, 85, 247, 0.2);
+            color: #a855f7;
+        }
+
+        /* Tool icons alignment fix */
+        .tool-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        /* Results button styles */
+        .results-btn {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        }
+
+        .results-btn:hover {
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+        }
+
+        .results-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .results-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Consultation button styles */
+        .consultation-btn {
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+            border: 2px solid #3b82f6;
+        }
+
+        .consultation-btn:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .consultation-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .consultation-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Pulse animation */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Testimonials styles */
+        .testimonial-card {
+            background: linear-gradient(145deg, #111111, #1a1a1a);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+        }
+
+        .testimonial-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient to bottom, #3b82f6, #8b5cf6);
+        }
+
+        .testimonial-rating {
+            color: #fbbf24;
+        }
+
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid rgba(59, 130, 246, 0.5);
+            object-fit: cover;
+        }
+
+        .testimonial-quote {
+            position: relative;
+        }
+
+        .testimonial-quote::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: -10px;
+            font-size: 60px;
+            color: rgba(59, 130, 246, 0.2);
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        .testimonial-quote::after {
+            content: '"';
+            position: absolute;
+            bottom: -40px;
+            right: -10px;
+            font-size: 60px;
+            color: rgba(59, 130, 246, 0.2);
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        /* Privacy notice */
+        .privacy-notice {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 12px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 24px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Avatar placeholder styles */
+        .avatar-placeholder {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid rgba(59, 130, 246, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #333;
+            color: #fff;
+            font-weight: bold;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-black bg-opacity-80 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="text-2xl font-bold gradient-text">GABRIEL MARCEL</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-center space-x-8">
+                        <a href="#hero" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-300">Início</a>
+                        <a href="#services" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-300">Serviços</a>
+                        <a href="#results" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-300">Resultados</a>
+                        <a href="#testimonials" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-300">Depoimentos</a>
+                        <a href="#tools" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-300">Ferramentas</a>
+                        <a href="#results" class="results-btn text-white px-6 py-2 rounded-md text-sm font-medium transition duration-300 neon-shadow glow flex items-center">
+                            <i class="fas fa-chart-line mr-2"></i> Resultados Reais
+                        </a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-400 hover:text-white focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="min-h-screen flex items-center justify-center pt-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-black to-gray-900">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+            <div class="space-y-8">
+                <h1 class="text-4xl md:text-6xl font-bold leading-tight hidden-animation slide-up">
+                    Eu escalo negócios com <span class="gradient-text">tráfego pago</span> de verdade
+                </h1>
+                <p class="text-xl text-gray-400 max-w-2xl hidden-animation slide-up delay-100">
+                    Estratégias avançadas de anúncios que convertem visitantes em clientes e aumentam seu faturamento.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-4 hidden-animation slide-up delay-200">
+                    <a href="#results" class="results-btn text-white px-8 py-4 rounded-lg text-lg font-semibold transition duration-300 flex items-center neon-shadow pulse">
+                        <i class="fas fa-trophy mr-3 text-xl"></i> Ver Resultados Reais
+                    </a>
+                    <a href="https://wa.link/e2tgcx" target="_blank" class="consultation-btn text-blue-400 px-8 py-4 rounded-lg text-lg font-semibold transition duration-300 flex items-center neon-border">
+                        <i class="fas fa-calendar-check mr-3 text-xl"></i> Agendar Consultoria
+                    </a>
+                </div>
+                <div class="flex items-center pt-4 hidden-animation slide-up delay-300">
+                    <div class="flex -space-x-2">
+                        <div class="w-10 h-10 rounded-full bg-gray-700 border-2 border-gray-800 flex items-center justify-center text-xs">CL</div>
+                        <div class="w-10 h-10 rounded-full bg-gray-700 border-2 border-gray-800 flex items-center justify-center text-xs">AN</div>
+                        <div class="w-10 h-10 rounded-full bg-gray-700 border-2 border-gray-800 flex items-center justify-center text-xs">MT</div>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm text-gray-400">+50 empresários já escalaram seus negócios</p>
+                    </div>
+                </div>
+            </div>
+            <div class="relative hidden md:block hidden-animation scale-up delay-300">
+                <div class="absolute -top-20 -left-20 w-64 h-64 bg-blue-500 rounded-full filter blur-3xl opacity-20"></div>
+                <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-purple-500 rounded-full filter blur-3xl opacity-20"></div>
+                <div class="relative floating">
+                    <div class="absolute -inset-4 rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 opacity-70 blur-lg"></div>
+                    <div class="relative bg-gray-900 rounded-xl p-8 neon-border">
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="bg-gray-800 rounded-lg p-4 h-24 flex items-center justify-center">
+                                <i class="fas fa-chart-line text-3xl text-blue-500"></i>
+                            </div>
+                            <div class="bg-gray-800 rounded-lg p-4 h-24 flex items-center justify-center">
+                                <i class="fas fa-bullseye text-3xl text-purple-500"></i>
+                            </div>
+                            <div class="bg-gray-800 rounded-lg p-4 h-24 flex items-center justify-center">
+                                <i class="fas fa-money-bill-wave text-3xl text-green-500"></i>
+                            </div>
+                            <div class="bg-gray-800 rounded-lg p-4 h-24 flex items-center justify-center">
+                                <i class="fas fa-users text-3xl text-yellow-500"></i>
+                            </div>
+                            <div class="bg-gray-800 rounded-lg p-4 h-24 flex items-center justify-center">
+                                <i class="fas fa-funnel-dollar text-3xl text-red-500"></i>
+                            </div>
+                            <div class="bg-gray-800 rounded-lg p-4 h-24 flex items-center justify-center">
+                                <i class="fas fa-retweet text-3xl text-blue-400"></i>
+                            </div>
+                        </div>
+                        <div class="mt-6 bg-gray-800 rounded-lg p-4">
+                            <div class="h-4 bg-gray-700 rounded-full w-full mb-2"></div>
+                            <div class="h-4 bg-gray-700 rounded-full w-3/4 mb-2"></div>
+                            <div class="h-4 bg-gray-700 rounded-full w-5/6"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 px-4 sm:px-6 lg:px-8 bg-gray-900">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold section-title inline-block hidden-animation slide-up">O QUE EU FAÇO</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-gray-800 rounded-xl p-8 neon-border hover:neon-shadow transition duration-500 hidden-animation slide-up delay-100">
+                    <div class="w-16 h-16 bg-blue-900 bg-opacity-30 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-rocket text-3xl text-blue-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Meta Ads</h3>
+                    <p class="text-gray-400">
+                        Campanhas estratégicas no Facebook e Instagram que realmente convertem, com segmentação precisa e criativos virais.
+                    </p>
+                </div>
+                
+                <div class="bg-gray-800 rounded-xl p-8 neon-border hover:neon-shadow transition duration-500 hidden-animation slide-up delay-200">
+                    <div class="w-16 h-16 bg-purple-900 bg-opacity-30 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-music text-3xl text-purple-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">TikTok Ads</h3>
+                    <p class="text-gray-400">
+                        Domínio completo da plataforma que está revolucionando o marketing digital com anúncios nativos và orgânicos.
+                    </p>
+                </div>
+                
+                <div class="bg-gray-800 rounded-xl p-8 neon-border hover:neon-shadow transition duration-500 hidden-animation slide-up delay-300">
+                    <div class="w-16 h-16 bg-green-900 bg-opacity-30 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-funnel-dollar text-3xl text-green-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Funil de Conversão</h3>
+                    <p class="text-gray-400">
+                        Estruturas completas de conversão desde o topo até o fundo do funil, maximizando cada etapa do processo de venda.
+                    </p>
+                </div>
+                
+                <div class="bg-gray-800 rounded-xl p-8 neon-border hover:neon-shadow transition duration-500 hidden-animation slide-up delay-400">
+                    <div class="w-16 h-16 bg-yellow-900 bg-opacity-30 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-sync-alt text-3xl text-yellow-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Remarketing</h3>
+                    <p class="text-gray-400">
+                        Estratégias avançadas para reconquistar visitantes e aumentar significativamente suas taxas de conversão.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results" class="py-20 px-4 sm:px-6 lg:px-8 bg-black">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold section-title inline-block hidden-animation slide-up">RESULTADOS</h2>
+                <p class="text-xl text-gray-400 mt-6 max-w-3xl mx-auto hidden-animation slide-up delay-100">
+                    Métricas reals de desempenho que fazem a diferença no seu negócio
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="stat-card rounded-xl p-8 text-center neon-border hidden-animation slide-up delay-100">
+                    <div class="text-5xl font-bold gradient-text mb-3">5x</div>
+                    <h3 class="text-xl font-semibold mb-2">ROI</h3>
+                    <p class="text-gray-400">Retorno sobre investimento médio em campanhas</p>
+                </div>
+                
+                <div class="stat-card rounded-xl p-8 text-center neon-border hidden-animation slide-up delay-200">
+                    <div class="text-5xl font-bold gradient-text mb-3">-70%</div>
+                    <h3 class="text-xl font-semibold mb-2">CPL</h3>
+                    <p class="text-gray-400">Redução no custo por lead com estratégias otimizadas</p>
+                </div>
+                
+                <div class="stat-card rounded-xl p-8 text-center neon-border hidden-animation slide-up delay-300">
+                    <div class="text-5xl font-bold gradient-text mb-3">3.5x</div>
+                    <h3 class="text-xl font-semibold mb-2">CTR</h3>
+                    <p class="text-gray-400">Taxa de clique acima da média do mercado</p>
+                </div>
+                
+                <div class="stat-card rounded-xl p-8 text-center neon-border hidden-animation slide-up delay-400">
+                    <div class="text-5xl font-bold gradient-text mb-3">+300%</div>
+                    <h3 class="text-xl font-semibold mb-2">Conversões</h3>
+                    <p class="text-gray-400">Aumento em conversões com remarketing</p>
+                </div>
+            </div>
+            
+            <div class="mt-16 grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 class="text-2xl font-bold mb-6 hidden-animation slide-right">Estratégias <span class="gradient-text">comprovadas</span> que geram resultados</h3>
+                    <p class="text-gray-400 mb-6 hidden-animation slide-right delay-100">
+                        Cada campanha é meticulosamente planejada, testada e otimizada para garantir o máximo desempenho. Não trabalho com achismos - tudo é baseado em dados e análise contínua.
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start hidden-animation slide-right delay-200">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center">
+                                    <i class="fas fa-check text-xs"></i>
+                                </div>
+                            </div>
+                            <p class="ml-3 text-gray-300">Segmentação avançada por comportamento e interesses</p>
+                        </li>
+                        <li class="flex items-start hidden-animation slide-right delay-300">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center">
+                                    <i class="fas fa-check text-xs"></i>
+                                </div>
+                            </div>
+                            <p class="ml-3 text-gray-300">Criativos otimizados para cada etapa do funil</p>
+                        </li>
+                        <li class="flex items-start hidden-animation slide-right delay-400">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center">
+                                    <i class="fas fa-check text-xs"></i>
+                                </div>
+                            </div>
+                            <p class="ml-3 text-gray-300">Landing pages com alta taxa de conversão</p>
+                        </li>
+                        <li class="flex items-start hidden-animation slide-right delay-500">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center">
+                                    <i class="fas fa-check text-xs"></i>
+                                </div>
+                            </div>
+                            <p class="ml-3 text-gray-300">Automação e sequências de vendas inteligentes</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="relative hidden-animation slide-left delay-300">
+                    <div class="absolute -inset-4 rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 opacity-20 blur-lg"></div>
+                    <div class="relative bg-gray-900 rounded-xl p-8 neon-border">
+                        <h4 class="font-semibold text-lg mb-6 flex items-center">
+                            <i class="fas fa-chart-line text-blue-500 mr-2"></i> Performance Dashboard
+                            <span class="performance-badge green ml-auto">+12% esta semana</span>
+                        </h4>
+                        
+                        <div class="mb-8">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm text-gray-400">ROAS</span>
+                                <span class="text-sm font-medium">4.8x <span class="performance-badge">+0.5x</span></span>
+                            </div>
+                            <div class="performance-meter"></div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm text-gray-400">Taxa de Conversão</span>
+                                <span class="text-sm font-medium">8.7% <span class="performance-badge green">+1.2%</span></span>
+                            </div>
+                            <div class="performance-meter"></div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm text-gray-400">CPL</span>
+                                <span class="text-sm font-medium">R$ 1.20 <span class="performance-badge purple">-15%</span></span>
+                            </div>
+                            <div class="performance-meter"></div>
+                        </div>
+                        
+                        <div class="grid grid-cols-3 gap-4 pt-4 border-t border-gray-800">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold gradient-text">1.2K</div>
+                                <div class="text-xs text-gray-400">Leads</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold gradient-text">R$ 48K</div>
+                                <div class="text-xs text-gray-400">Faturamento</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold gradient-text">3.2x</div>
+                                <div class="text-xs text-gray-400">ROI</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20 px-4 sm:px-6 lg:px-8 bg-gray-900">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold section-title inline-block hidden-animation slide-up">DEPOIMENTOS</h2>
+                <p class="text-xl text-gray-400 mt-6 max-w-3xl mx-auto hidden-animation slide-up delay-100">
+                    O que meus clientes dizem sobre o trabalho
+                </p>
+            </div>
+
+            <!-- Privacy Notice -->
+            <div class="privacy-notice mb-12 hidden-animation slide-up">
+                <div class="flex items-start">
+                    <i class="fas fa-lock text-blue-500 mt-1 mr-3"></i>
+                    <div>
+                        <p class="text-sm text-gray-300 font-medium">Respeitamos a privacidade e segurança de nossos clientes</p>
+                        <p class="text-xs text-gray-500">Todos os depoimentos são anônimos e os nomes foram alterados para proteger a identidade dos clientes. Os resultados podem variar de acordo com cada negócio.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card p-8 hidden-animation slide-up delay-100">
+                    <div class="flex items-center mb-6">
+                        <div class="avatar-placeholder">CM</div>
+                        <div class="ml-4">
+                            <h4 class="font-bold">Carlos Mendes</h4>
+                            <p class="text-sm text-gray-400">Negócio de Bem-Estar</p>
+                            <div class="testimonial-rating mt-1">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-quote pl-4">
+                        <p class="text-gray-300 italic">
+                            "O Gabriel transformou completamente nosso negócio! Em 3 meses, nossas vendas online aumentaram 400%. Sua abordagem estratégica e atenção aos detalhes são impressionantes. Recomendo para qualquer empresário que queira resultados reais."
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card p-8 hidden-animation slide-up delay-200">
+                    <div class="flex items-center mb-6">
+                        <div class="avatar-placeholder">AS</div>
+                        <div class="ml-4">
+                            <h4 class="font-bold">Ana Silva</h4>
+                            <p class="text-sm text-gray-400">Negócio de Educação</p>
+                            <div class="testimonial-rating mt-1">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-quote pl-4">
+                        <p class="text-gray-300 italic">
+                            "Contratei o Gabriel para gerenciar nossas campanhas e os resultados foram além do esperado. Reduzimos nosso CPL em 65% e aumentamos as matrículas em 300%. Seu conhecimento em Meta Ads é excepcional. Parceiro estratégico indispensável!"
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card p-8 hidden-animation slide-up delay-300">
+                    <div class="flex items-center mb-6">
+                        <div class="avatar-placeholder">PT</div>
+                        <div class="ml-4">
+                            <h4 class="font-bold">Paula Torres</h4>
+                            <p class="text-sm text-gray-400">Negócio de Tecnologia</p>
+                            <div class="testimonial-rating mt-1">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-quote pl-4">
+                        <p class="text-gray-300 italic">
+                            "Depois de tentar vários gestores de tráfego, finalmente encontrei um profissional que entrega resultados consistentes. O Gabriel estruturou um funil completo que triplicou nossas vendas em 2 meses. Sua comunicação clara e relatórios detalhados fazem toda diferença."
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 4 -->
+                <div class="testimonial-card p-8 hidden-animation slide-up delay-400">
+                    <div class="flex items-center mb-6">
+                        <div class="avatar-placeholder">RL</div>
+                        <div class="ml-4">
+                            <h4 class="font-bold">Ricardo Lima</h4>
+                            <p class="text-sm text-gray-400">Negócio de Saúde</p>
+                            <div class="testimonial-rating mt-1">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-quote pl-4">
+                        <p class="text-gray-300 italic">
+                            "O Gabriel implementou campanhas no TikTok para nosso negócio e os resultados foram surpreendentes! Aumentamos em 5x o número de clientes com um custo por lead muito abaixo do mercado. Seu domínio das novas plataformas é impressionante."
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 5 -->
+                <div class="testimonial-card p-8 hidden-animation slide-up delay-500">
+                    <div class="flex items-center mb-6">
+                        <div class="avatar-placeholder">MF</div>
+                        <div class="ml-4">
+                            <h4 class="font-bold">Mariana Fonseca</h4>
+                            <p class="text-sm text-gray-400">Negócio de Moda</p>
+                            <div class="testimonial-rating mt-1">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-quote pl-4">
+                        <p class="text-gray-300 italic">
+                            "Como empreendedora solo, precisava de alguém que entendesse meu negócio e entregasse resultados. O Gabriel não só atingiu como superou todas as metas! Meu faturamento mensal saltou de R$8k para R$35k em 4 meses. Melhor investimento que já fiz!"
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 6 -->
+                <div class="testimonial-card p-8 hidden-animation slide-up delay-600">
+                    <div class="flex items-center mb-6">
+                        <div class="avatar-placeholder">GA</div>
+                        <div class="ml-4">
+                            <h4 class="font-bold">Gustavo Almeida</h4>
+                            <p class="text-sm text-gray-400">Negócio de Consultoria</p>
+                            <div class="testimonial-rating mt-1">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-quote pl-4">
+                        <p class="text-gray-300 italic">
+                            "O remarketing estruturado pelo Gabriel foi um divisor de águas para nosso negócio. Convertemos 40% dos visitantes que abandonavam nosso site, aumentando nosso ticket médio em 25%. Sua capacidade de analisar dados e ajustar estratégias é de outro nível."
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-16 hidden-animation slide-up delay-700">
+                <a href="https://wa.link/e2tgcx" target="_blank" class="inline-block consultation-btn text-blue-400 px-12 py-5 rounded-full text-lg font-semibold transition duration-300 neon-border">
+                    <i class="fas fa-comment-dots mr-3 text-xl"></i> Quero resultados como esses
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section id="tools" class="py-20 px-4 sm:px-6 lg:px-8 bg-black">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold section-title inline-block hidden-animation slide-up">FERRAMENTAS</h2>
+                <p class="text-xl text-gray-400 mt-6 max-w-3xl mx-auto hidden-animation slide-up delay-100">
+                    Domínio completo das principais plataformas e tecnologias do mercado
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8">
+                <div class="tool-icon hidden-animation slide-up delay-100">
+                    <div class="tool-container">
+                        <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center mb-3">
+                            <i class="fab fa-facebook text-4xl text-blue-500"></i>
+                        </div>
+                        <span class="text-sm font-medium text-center">Meta Ads</span>
+                    </div>
+                </div>
+                
+                <div class="tool-icon hidden-animation slide-up delay-200">
+                    <div class="tool-container">
+                        <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center mb-3">
+                            <i class="fab fa-tiktok text-4xl text-purple-500"></i>
+                        </div>
+                        <span class="text-sm font-medium text-center">TikTok Ads</span>
+                    </div>
+                </div>
+                
+                <div class="tool-icon hidden-animation slide-up delay-300">
+                    <div class="tool-container">
+                        <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center mb-3">
+                            <i class="fas fa-chart-pie text-4xl text-orange-500"></i>
+                        </div>
+                        <span class="text-sm font-medium text-center">Google Analytics</span>
+                    </div>
+                </div>
+                
+                <div class="tool-icon hidden-animation slide-up delay-400">
+                    <div class="tool-container">
+                        <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center mb-3">
+                            <i class="fas fa-tag text-4xl text-blue-400"></i>
+                        </div>
+                        <span class="text-sm font-medium text-center">Facebook Pixel</span>
+                    </div>
+                </div>
+                
+                <div class="tool-icon hidden-animation slide-up delay-500">
+                    <div class="tool-container">
+                        <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center mb-3">
+                            <i class="fas fa-funnel-dollar text-4xl text-green-500"></i>
+                        </div>
+                        <span class="text-sm font-medium text-center">ClickFunnels</span>
+                    </div>
+                </div>
+                
+                <div class="tool-icon hidden-animation slide-up delay-600">
+                    <div class="tool-container">
+                        <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center mb-3">
+                            <i class="fas fa-envelope text-4xl text-yellow-500"></i>
+                        </div>
+                        <span class="text-sm font-medium text-center">ActiveCampaign</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Connect Section -->
+    <section id="connect" class="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-900 to-black">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl md:text-5xl font-bold mb-8 hidden-animation slide-up">
+                Pronto para <span class="gradient-text">escalar</span> seu negócio com tráfego pago?
+            </h2>
+            <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto hidden-animation slide-up delay-100">
+                Vamos conversar sobre como posso ajudar seu negócio a alcançar resultados extraordinários.
+            </p>
+            <div class="flex flex-wrap justify-center gap-6">
+                <a href="#results" class="inline-block results-btn text-white px-12 py-5 rounded-full text-lg font-semibold transition duration-300 neon-shadow glow hidden-animation slide-up delay-200">
+                    <i class="fas fa-trophy mr-3 text-xl"></i> Ver Resultados Reais
+                </a>
+                <a href="https://wa.link/e2tgcx" target="_blank" class="inline-block consultation-btn text-blue-400 px-12 py-5 rounded-full text-lg font-semibold transition duration-300 neon-border hidden-animation slide-up delay-300">
+                    <i class="fas fa-calendar-check mr-3 text-xl"></i> Agendar Consultoria
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 px-4 sm:px-6 lg:px-8 bg-black border-t border-gray-800">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div class="text-sm text-gray-500 mb-4 md:mb-0">
+                © 2025 Gabriel Marcel. Todos os direitos reservados.
+            </div>
+            <div class="flex space-x-6">
+                <a href="#" class="text-gray-500 hover:text-white transition duration-300">Termos</a>
+                <a href="#" class="text-gray-500 hover:text-white transition duration-300">Privacidade</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Animation on scroll with Intersection Observer
+        const animateElements = document.querySelectorAll('.hidden-animation');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                    entry.target.classList.add('animate');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        });
+
+        animateElements.forEach(element => {
+            observer.observe(element);
+        });
+
+        // Add hover effect to Results button
+        const resultsBtn = document.querySelector('.results-btn');
+        if (resultsBtn) {
+            resultsBtn.addEventListener('mouseenter', function() {
+                this.querySelector('i').style.transform = 'rotate(10deg) scale(1.1)';
+            });
+            resultsBtn.addEventListener('mouseleave', function() {
+                this.querySelector('i').style.transform = 'rotate(0deg) scale(1)';
+            });
+        }
+
+        // Add hover effect to Consultation button
+        const consultationBtn = document.querySelector('.consultation-btn');
+        if (consultationBtn) {
+            consultationBtn.addEventListener('mouseenter', function() {
+                this.querySelector('i').style.transform = 'rotate(10deg) scale(1.1)';
+            });
+            consultationBtn.addEventListener('mouseleave', function() {
+                this.querySelector('i').style.transform = 'rotate(0deg) scale(1)';
+            });
+        }
+
+        // Animate performance meters
+        const performanceMeters = document.querySelectorAll('.performance-meter');
+        performanceMeters.forEach((meter, index) => {
+            // Randomize the performance a bit for visual interest
+            const randomPercentage = 80 + Math.random() * 15;
+            meter.style.width = `${randomPercentage}%`;
+            
+            // Add slight animation
+            meter.style.animation = `meterAnimation 2s ease-in-out ${index * 0.2}s infinite alternate`;
+        });
+
+        // Prevent horizontal scroll
+        document.body.style.overflowX = 'hidden';
+    </script>
+</body>
+</html>
